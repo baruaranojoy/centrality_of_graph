@@ -1,0 +1,120 @@
+'''
+
+Function Degree_Centrality takes edge_list as input.
+--------------------------------------------
+Representation of input :
+--------------------------------------------
+[[2, 1, 3, 4, 5,...]
+,[4, 5, 7, 9 ,.....]
+,[7, 3, 5, 7, 87, 11,...]
+,.....]
+--------------------------------------------
+Each cloumn represents the connection for one node i.e.,
+the first element in each column is a unique element and
+the other elements following it are the nodes connected
+to the unique particular node.
+
+Formula for Degree Centrality : Summation over all neighbouring nodes ((a) / (b))
+a : |degree of node with max. degree in the graph - degree of present node|
+b : |degree of present node - degree of neighbouring nodes|
+
+If any particular node dosent have Degree Centrality or if
+its Degree Centrality can't be defined at present then it
+is assigned a very high value i.e., 100 in this function.
+
+It returns a list in which Degree Centrality of all nodes
+are present as 1st tupple and followed by node number.
+------------------------------------------------
+Representation of out-put
+------------------------------------------------
+[[0.54 , 2]
+,[0.47 , 4]
+,[0.74 , 8]
+,.................]
+------------------------------------------------
+
+
+'''
+
+
+
+
+def Degree_Centrality(edge_list):
+    # find all the unique nodes in the edge list
+    # unique_node holds all the unique nodes present
+    # in the edge list
+    k = 0
+    unique_node = []
+    for k in range(len(edge_list)):
+        el = edge_list[k]
+        l = 0
+        for l in range(len(el)):
+            unique_node.append(el[l])
+    unique_node = list(set(unique_node))
+    unique_node.sort()
+
+    # finding the node with hightest degree
+    # largest holds the value of highest
+    # degree of a node in the edge list
+    k = 0
+    largest = 0
+    for k in range(len(edge_list)):
+        if len(edge_list[k]) > largest:
+            largest = len(edge_list[k])
+
+    # finding the numarator for degree centrality
+    # numarator = a - b
+    # a = largest * number of chids of that node
+    # b = sum of degree of all child nodes of a node
+    # and the data will be stored in the form
+    # [[degree centrality, node number], [], [],.........., []]
+    # first numarator will be calculated then
+    # denominator then they will be divided
+    k = 0
+    list_degree_centrality = []
+    
+    # travarsing all the recorde in the edge list
+    for k in range(len(edge_list)):
+        row = edge_list[k]
+        numarator = 0
+        denominator = 0.0
+        d_centrality = 0.0
+
+        # if the node is not even connected to a single node
+        # then it dont contribute anythng to the graph
+        # so degree centrality of such node is 0
+        if len(row) == 1:
+            d_centrality = 100.0
+
+        # else if it is connected to other nodes then we
+        # calculate numarators and denominators
+        else:
+            l = 0
+            su = 0
+
+            # rach element of a record is travarsed
+            # each element is taken and then its degree is
+            # added up in the su variable
+            for l in range(len(row)-1):
+                each = row[l+1]
+                m = 0
+                for m in range(len(edge_list)):
+                    rr = edge_list[m]
+                    if rr[0] == each:
+                        su = su + len(rr) - 1
+           
+            # claculating the numarator and denominator
+            denominator = abs(float(largest * (len(row) - 1) - su))
+            numarator = abs(float((len(row) - 1) * (len(row) - 1) - su))
+            
+            if denominator == 0:
+                d_centrality = 100.0
+            else:
+                d_centrality = numarator / denominator
+        
+        list_degree_centrality.append([d_centrality , row[0]])
+    
+    # Sorting based on the degree_centrality 
+    list_degree_centrality.sort()
+    
+    return list_degree_centrality
