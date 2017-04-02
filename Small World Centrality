@@ -1,0 +1,214 @@
+'''
+This centrality is not-traditional one
+This is based on the experiment of small-world-experiment.
+According to the experiment a person on earth will know all 
+other person in six hops by the influence of some person in
+between that acts as a bridge.
+So in this centrality we calculated the total number of
+nodes a node can access within six hops and divided to the
+total number of nodes in the graph.
+Experiment was carried-out on dataset of social network.
+
+
+Function SWC takes edge_list as input.
+--------------------------------------------
+Representation of input (parameter-1):
+--------------------------------------------
+[[2, 1, 3, 4, 5,...]
+,[4, 5, 7, 9 ,.....]
+,[7, 3, 5, 7, 87, 11,...]
+,.....]
+--------------------------------------------
+Each cloumn represents the connection for one node i.e.,
+the first element in each column is a unique element and
+the other elements following it are the nodes connected
+to the unique particular node.
+--------------------------------------------
+Representation of input (parameter-2):
+--------------------------------------------
+[2, 3, 4, 5, 7, 8, 9, 12, 14,..........]
+--------------------------------------------
+Second parameter contains the list of all of the nodes 
+that are unique.
+
+Formula for Degree Centrality :  (a) / (b)
+a : |total number of connection to unique nodes in six hops from the point of origine|
+b : |total number of unique nodes present in the graph|
+
+If any particular node dosent have Degree Centrality or if
+its Degree Centrality can't be defined at present then it
+is assigned a very high value i.e., 100 in this function.
+
+It returns a list in which Degree Centrality of all nodes
+are present as 1st tupple and followed by node number.
+------------------------------------------------
+Representation of out-put
+------------------------------------------------
+[[0.54 , 2]
+,[0.47 , 3]
+,[0.74 , 4]
+,.................]
+------------------------------------------------
+
+
+'''
+
+
+
+def SWC(edge_list , unique):
+    
+    nodes = unique
+
+    small_world_result = []
+
+    n = 0
+    for n in range(len(nodes)):
+        # reading one node at a time
+        node_number = nodes[n]
+        one = []
+        two = []
+        three = []
+        four = []
+        five = []
+        six = []
+        total = []
+        connection = 0.0
+        total_connection = float(len(edge_list))
+        s_w_c = 0.0
+
+        ## Finding the nodes that are connected to each nodes in total of six hops
+
+        ## for first hop
+        k = 0
+        for k in range(len(edge_list)):
+            data = edge_list[k]
+            if data[0] == node_number and len(data) > 1:
+                l = 0
+                for l in range(len(data)-1):
+                    one.append(data[l+1])
+                break
+      
+
+        ## for second hop
+        if len(one) > 0:
+            k = 0
+            for k in range(len(one)):
+                dd = one[k]
+                m = 0
+                for m in range(len(edge_list)):
+                    data = edge_list[m]
+                    if data[0] == dd and len(data) > 1:
+                        l = 0
+                        for l in range(len(data)-1):
+                            two.append(data[l+1])
+                        break
+       
+
+        ## for thrird hop
+        if len(two) > 0:
+            k = 0
+            for k in range(len(two)):
+                dd = two[k]
+                m = 0
+                for m in range(len(edge_list)):
+                    data = edge_list[m]
+                    if data[0] == dd and len(data) > 1:
+                        l = 0
+                        for l in range(len(data)-1):
+                            three.append(data[l+1])
+                        break
+        
+
+        ## for fourth hop
+        if len(three) > 0:
+            k = 0
+            for k in range(len(three)):
+                dd = three[k]
+                m = 0
+                for m in range(len(edge_list)):
+                    data = edge_list[m]
+                    if data[0] == dd and len(data) > 1:
+                        l = 0
+                        for l in range(len(data)-1):
+                            four.append(data[l+1])
+                        break
+        
+
+        ## for fifth hop
+        if len(four) > 0:
+            k = 0
+            for k in range(len(four)):
+                dd = four[k]
+                m = 0
+                for m in range(len(edge_list)):
+                    data = edge_list[m]
+                    if data[0] == dd and len(data) > 1:
+                        l = 0
+                        for l in range(len(data)-1):
+                            five.append(data[l+1])
+                        break
+        
+
+        ## for sixth hop
+        if len(five) > 0:
+            k = 0
+            for k in range(len(five)):
+                dd = five[k]
+                m = 0
+                for m in range(len(edge_list)):
+                    data = edge_list[m]
+                    if data[0] == dd and len(data) > 1:
+                        l = 0
+                        for l in range(len(data)-1):
+                            six.append(data[l+1])
+                        break
+       
+
+        ## making of total
+
+        # collecting data from first hop
+        k = 0
+        for k in range(len(one)):
+            total.append(one[k])
+
+        # collecting data from second hop
+        k = 0
+        for k in range(len(two)):
+            total.append(two[k])
+
+        # collecting data from third hop
+        k = 0
+        for k in range(len(three)):
+            total.append(three[k])
+
+        # collecting data from fourth hop
+        k = 0
+        for k in range(len(four)):
+            total.append(four[k])
+
+        # collecting data from fifth hop
+        k = 0
+        for k in range(len(five)):
+            total.append(five[k])
+
+        # collecting data from sixth hop
+        k = 0
+        for k in range(len(six)):
+            total.append(six[k])
+
+        # getting the unique nodes connected in total of six hops to the node
+        total = list(set(total))
+        connection = float(len(total))
+
+        ## finding the node in the list total
+        k = 0
+        for k in range(len(total)):
+            if node_number == total[k]:
+                connection = float(connection - 1.0)
+
+        s_w_c = float(float(connection) / float(total_connection))
+        #print s_w_c
+
+        small_world_result.append([s_w_c , node_number])
+    
+    return small_world_result
