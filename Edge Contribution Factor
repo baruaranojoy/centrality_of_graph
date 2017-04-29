@@ -1,0 +1,47 @@
+'''
+Edge contribution factor code
+
+If you use this in any project or reserch work 
+Sight this account and this code.
+
+'''
+
+def sum_neighbour(edge_list, data):
+    summ = 0
+    k = 0
+    if len(data) == 1:
+        return 0
+    else:
+        for k in range(len(data)-1):
+            element = data[k+1]
+            j = 0
+            for j in range(len(edge_list)):
+                edge = edge_list[j]
+                if element == edge[0]:
+                    summ = summ + len(edge) - 1
+                    break
+        return summ
+
+def ECF(edge_list):
+    degree_of_vertex = 0.0
+    sum_degree_neighbour = 0.0
+    degree_of_graph = 0.0
+    numarator = 0.0
+    ECF = 0.0
+    list_ecf = []
+    k = 0
+    for k in range(len(edge_list)):
+        degree_of_graph = degree_of_graph + len(edge_list[k]) - 1
+    edge_list.sort()
+    k = 0
+    for k in range(len(edge_list)):
+        data = edge_list[k]
+        degree_of_vertex = len(edge_list[k]) - 1
+        sum_degree_neighbour = sum_neighbour(edge_list, edge_list[k])
+        numarator = degree_of_vertex + sum_degree_neighbour
+        if degree_of_graph == 0:
+            ECF = 0.0
+        else:
+            ECF = float(numarator / degree_of_graph)
+        list_ecf.append([ECF , data[0]])
+    return list_ecf
